@@ -1,3 +1,3 @@
-from models.dealz import Dealz
+from models.dealz import Dealz, PriceHistory
 
-__all__ = ["Dealz"]
+__all__ = ["Dealz", "PriceHistory"]
