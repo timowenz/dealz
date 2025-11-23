@@ -45,7 +45,9 @@ class DealzBot:
 
             # Results returning for API
             results[site.name] = {
-                "url": site.value,
+                "url": self._get_product_url(
+                    base_url=site.value, product_name=product_name
+                ),
                 "price": price,
             }
         return results
@@ -116,7 +118,7 @@ class DealzBot:
                     price_in_cents = int(euro_price + cent_price)
                     # print(f"Price found: {euro_price}.{cent_price} EUR")
                     return price_in_cents
-                
+
                 print(f"Price not found for {url}")
                 return None
             except Exception as e:

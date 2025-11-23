@@ -5,8 +5,13 @@ from dotenv import load_dotenv
 from routers.v1 import dealz_router
 from database import get_db
 from services.dealz_bot import DealzBot
+from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
+
+origins = [
+    "http://localhost:5173",
+]
 
 
 @asynccontextmanager
@@ -18,5 +23,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(router=dealz_router.router, prefix="/api/v1")
