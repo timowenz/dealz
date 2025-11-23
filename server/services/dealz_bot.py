@@ -34,7 +34,7 @@ class DealzBot:
                 results[site.name] = {
                     "url": site.value,
                     "price": None,
-                    "product_name": product_name,
+                    "productName": product_name,
                     "error": "Not allowed by robots.txt",
                 }
                 continue
@@ -197,3 +197,9 @@ class DealzBot:
         if "otto" in url:
             return "Otto"
         return "Unknown"
+
+    def get_lowest_price(self, product_name: str) -> int | None:
+        dealz = self.db.query(Dealz).filter(Dealz.product_name == product_name).first()
+        if dealz:
+            return dealz.lowest_price
+        return None

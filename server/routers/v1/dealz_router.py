@@ -14,7 +14,11 @@ async def browser(product_name: str, db: Session = Depends(get_db)):
         dealz_bot = DealzBot(db=db)
         results: dict = await dealz_bot.search_prices(product_name=product_name)
         print(results)
-        return {"productName": product_name, "results": results}
+        return {
+            "productName": product_name,
+            "lowestPrice": dealz_bot.get_lowest_price(product_name=product_name),
+            "results": results,
+        }
     except OperationalError as e:
         print(e)
         return {

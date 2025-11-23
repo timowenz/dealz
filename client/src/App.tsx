@@ -18,6 +18,7 @@ type ProductNameSearchResults = {
 
 type ProductNameSearch = {
   productName: string;
+  lowestPrice: number | null;
   results: ProductNameSearchResults;
 };
 
@@ -88,7 +89,16 @@ function MerchantResult(data: ProductNameSearch) {
 
   return (
     <div className="w-[60%]">
-      <p className="text-center">Product: {data.productName}</p>
+      <div className="text-center">
+        <p>Product: {data.productName}</p>
+        <p>
+          Lowest Price:{" "}
+          {data.lowestPrice === null || data.lowestPrice === undefined
+            ? "N/A"
+            : `${centToEuro(data.lowestPrice)} €`}
+        </p>
+      </div>
+
       <br />
       <ul className="flex flex-col gap-2.5">
         {data.results &&
