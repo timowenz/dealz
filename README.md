@@ -1,56 +1,87 @@
 # Dealz
 
-A application for tracking products and prices.
+An application for tracking products and prices.
 
 ## Prerequisites
 
 - Python 3.14+
 - PostgreSQL database
 - pip or conda
+- Node.js (for Vite client)
 
 ## Setup
 
-1. **Clone the repository**
+### 1. Clone the repository
 
-   ```bash
-   git clone <repository-url>
-   cd dealz
-   ```
+```bash
+git clone <repository-url>
+cd dealz
+```
 
-2. **Create a Conda environment**
+### 2. Server Setup
 
-   ```bash
-   conda create -n dealz-env python=3.14
-   conda activate dealz-env
-   ```
+#### a. Create a Conda environment
 
-3. **Install dependencies**
+```bash
+conda create -n dealz-env python=3.14
+conda activate dealz-env
+```
 
-   ```bash
-   cd server
-   pip install -r requirements.txt
-   ```
+#### b. Install server dependencies
 
-4. **Configure environment variables**
+```bash
+cd server
+pip install -r requirements.txt
+```
 
-   Create a `.env` file in the `server/` directory with the following variables:
+#### c. Configure environment variables
 
-   ```env
-   DB_DRIVER=postgresql
-   DB_USER=postgres
-   DB_PASSWORD=your_password
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_NAME=dev-dealz
-   ```
+Create a `.env` file in the `server/` directory with the following variables:
 
-5. **Run database migrations or start the application**
-   ```bash
-   cd server
-   alembic upgrade head
-   # or
-   uvicorn main:app --reload
-   ```
+```env
+DB_DRIVER=postgresql
+DB_USER=postgres
+DB_PASSWORD=your_password
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=dev-dealz
+```
+
+#### d. Run database migrations or start the application
+
+```bash
+cd server
+alembic upgrade head
+# or
+uvicorn main:app --reload
+```
+
+---
+
+### 3. Vite Client Setup
+
+The client application is located in the `client` directory and uses Vite.
+
+#### a. Install Node.js dependencies
+
+```bash
+cd ../client
+npm install
+```
+
+#### b. Configure client environment variables
+
+If necessary, create a `.env` file in the `client/` directory (see `client/.env.example` for reference).
+
+#### c. Start the Vite development server
+
+```bash
+npm run dev
+```
+
+The client will be running on [http://localhost:5173](http://localhost:5173) (or the port specified by Vite).
+
+---
 
 ## Database Migrations
 
