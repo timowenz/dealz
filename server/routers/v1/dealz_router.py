@@ -8,13 +8,13 @@ from services.dealz_bot import DealzBot
 router = APIRouter()
 
 
-@router.get("/browser")
-async def browser(db: Session = Depends(get_db)):
+@router.get("/browser/{product_name}")
+async def browser(product_name: str, db: Session = Depends(get_db)):
     try:
         dealz_bot = DealzBot(db=db)
-        results: dict = await dealz_bot.search_prices(product_name="Sony WH-1000XM4")
+        results: dict = await dealz_bot.search_prices(product_name=product_name)
         print(results)
-        return results
+        return {"productName": product_name, "results": results}
     except OperationalError as e:
         print(e)
         return {
@@ -22,4 +22,4 @@ async def browser(db: Session = Depends(get_db)):
         }
     except Exception as e:
         print(e)
-        return {"error": e}
+        return {"error": str(e)}

@@ -47,7 +47,6 @@ class DealzBot:
             results[site.name] = {
                 "url": site.value,
                 "price": price,
-                "productName": product_name,
             }
         return results
 
@@ -74,7 +73,9 @@ class DealzBot:
         if response.status_code != 200:
             # await self.crawl_with_browser(url=product_url)
             # return None
-            print("HTTP response was not successful")
+            print(
+                "HTTP response was not successful. Status Code:", response.status_code
+            )
 
         price_in_cents = await self.crawl_with_browser(
             url=product_url, product_name=product_name
@@ -96,26 +97,28 @@ class DealzBot:
             try:
                 print("URL:", url)
 
-                euro_price = None
-                cent_price = None
+                price_info = None
 
                 match True:
                     case _ if "amazon" in url:
                         amazon_crawler = AmazonCrawler()
-                        (
-                            euro_price,
-                            cent_price,
-                        ) = await amazon_crawler.get_latest_price_info(page=page)
+                        price_info = await amazon_crawler.get_latest_price_info(
+                            page=page, product_name=product_name
+                        )
                     case _ if "otto" in url:
                         otto_crawler = OttoCrawler()
+                        price_info = await otto_crawler.get_latest_price_info(
+                            page=page, product_name=product_name
+                        )
 
-                        (
-                            euro_price,
-                            cent_price,
-                        ) = await otto_crawler.get_latest_price_info(page=page)
-                price_in_cents = int(euro_price + cent_price)
-                # print(f"Price found: {euro_price}.{cent_price} EUR")
-                return price_in_cents
+                if price_info:
+                    euro_price, cent_price = price_info
+                    price_in_cents = int(euro_price + cent_price)
+                    # print(f"Price found: {euro_price}.{cent_price} EUR")
+                    return price_in_cents
+                
+                print(f"Price not found for {url}")
+                return None
             except Exception as e:
                 print(f"Could not find price element: {e}")
             # await page.wait_for_timeout(100000)

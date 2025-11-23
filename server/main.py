@@ -12,11 +12,11 @@ load_dotenv()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     dealz_bot = DealzBot(db=next(get_db()))
-    results: dict = await dealz_bot.search_prices(product_name="Sony WH-1000XM4")
+    results: dict = await dealz_bot.search_prices(product_name="Sony WH-1000XM5")
     print(results)
     yield
 
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 app.include_router(router=dealz_router.router, prefix="/api/v1")
