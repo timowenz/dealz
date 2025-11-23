@@ -46,6 +46,7 @@ export default function App() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-5">
+      <h1 className="text-4xl font-bold">Dealz</h1>
       <form onSubmit={submitProductNameSearch} className="w-[30%] rounded-md">
         <Input
           placeholder="Enter product name"
@@ -56,7 +57,12 @@ export default function App() {
         ></Input>
       </form>
 
-      {isLoading && <LoaderCircleIcon className="animate-spin" />}
+      {isLoading && (
+        <div className="flex items-center gap-1">
+          <p>Searching</p>
+          <LoaderCircleIcon className="animate-spin" />
+        </div>
+      )}
       {error && <div className="text-red-500">An error occured: {error}</div>}
 
       {data && <MerchantResult {...data} />}
@@ -71,39 +77,45 @@ function MerchantResult(data: ProductNameSearch) {
 
   return (
     <div>
-      Product: {data.productName}
+      <p className="text-center">Product: {data.productName}</p>
       <br />
-      <br />
-      <ul>
+      <ul className="flex flex-col gap-2.5">
         {data.results &&
         typeof data.results === "object" &&
         Object.keys(data.results).length > 0 ? (
-          Object.entries(data.results).map(
-            ([key, result]: [
-              string,
-              { url: string; price: number | null }
-            ]) => (
-              <li key={key} className="flex gap-2.5">
-                <div>
-                  Price:{" "}
-                  {result.price === null
-                    ? "Not available"
-                    : `${centToEuro(result.price)} €`}
-                </div>
-                <div>
-                  Link:{" "}
-                  <a
-                    href={result.url}
-                    className="text-blue-600 underline"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {result.url}
-                  </a>
-                </div>
-              </li>
+          Object.entries(data.results)
+            .sort(([, a], [, b]) => {
+              if (a.price === null && b.price === null) return 0;
+              if (a.price === null) return 1;
+              if (b.price === null) return -1;
+              return a.price - b.price;
+            })
+            .map(
+              ([key, result]: [
+                string,
+                { url: string; price: number | null }
+              ]) => (
+                <li key={key} className="flex gap-2.5 border rounded-md p-4">
+                  <div>
+                    Price:{" "}
+                    {result.price === null
+                      ? "Not available"
+                      : `${centToEuro(result.price)} €`}
+                  </div>
+                  <div>
+                    Link:{" "}
+                    <a
+                      href={result.url}
+                      className="text-blue-600 underline"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {result.url}
+                    </a>
+                  </div>
+                </li>
+              )
             )
-          )
         ) : (
           <li>No results found.</li>
         )}
