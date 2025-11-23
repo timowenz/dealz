@@ -14,7 +14,7 @@ An application for tracking products and prices.
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone git@github.com:timowenz/dealz.git
 cd dealz
 ```
 
@@ -65,21 +65,17 @@ The client application is located in the `client` directory and uses Vite.
 #### a. Install Node.js dependencies
 
 ```bash
-cd ../client
+cd ./client
 npm install
 ```
 
-#### b. Configure client environment variables
-
-If necessary, create a `.env` file in the `client/` directory (see `client/.env.example` for reference).
-
-#### c. Start the Vite development server
+#### b. Start the Vite development server
 
 ```bash
 npm run dev
 ```
 
-The client will be running on [http://localhost:5173](http://localhost:5173) (or the port specified by Vite).
+The client will be running on [http://localhost:5173](http://localhost:5173).
 
 ---
 
