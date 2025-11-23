@@ -1,5 +1,11 @@
 # Dealz
 
+
+
+https://github.com/user-attachments/assets/b7de3c29-abcc-42ce-adac-d4d3f46a7c44
+
+
+
 An application for tracking products and prices.
 
 ## Prerequisites
