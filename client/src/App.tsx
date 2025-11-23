@@ -3,10 +3,16 @@ import { Input } from "./components/ui/input";
 import axios, { AxiosError } from "axios";
 import { LoaderCircleIcon } from "lucide-react";
 
+type PriceHistory = {
+  price: number | null;
+  timestamp: string;
+};
+
 type ProductNameSearchResults = {
   [merchant: string]: {
     url: string;
     price: number | null;
+    priceHistory: PriceHistory[];
   };
 };
 
@@ -75,8 +81,13 @@ function MerchantResult(data: ProductNameSearch) {
     return (cents / 100).toFixed(2);
   }
 
+  function formatGermanDate(dateStr: string): string {
+    const date = new Date(dateStr);
+    return date.toLocaleString("de-DE");
+  }
+
   return (
-    <div>
+    <div className="w-[60%]">
       <p className="text-center">Product: {data.productName}</p>
       <br />
       <ul className="flex flex-col gap-2.5">
@@ -88,34 +99,56 @@ function MerchantResult(data: ProductNameSearch) {
               if (a.price === null && b.price === null) return 0;
               if (a.price === null) return 1;
               if (b.price === null) return -1;
-              return a.price - b.price;
+              return (a.price ?? 0) - (b.price ?? 0);
             })
-            .map(
-              ([key, result]: [
-                string,
-                { url: string; price: number | null }
-              ]) => (
-                <li key={key} className="flex gap-2.5 border rounded-md p-4">
-                  <div>
-                    Price:{" "}
-                    {result.price === null
-                      ? "Not available"
-                      : `${centToEuro(result.price)} €`}
-                  </div>
-                  <div>
-                    Link:{" "}
-                    <a
-                      href={result.url}
-                      className="text-blue-600 underline"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {result.url}
-                    </a>
-                  </div>
-                </li>
-              )
-            )
+            .map(([key, result]) => (
+              <li
+                key={key}
+                className="flex flex-col gap-2.5 border rounded-md p-4"
+              >
+                <div>
+                  <span className="font-semibold">{key}</span>
+                </div>
+                <div>
+                  Latest Price:{" "}
+                  {result.price === null
+                    ? "N/A"
+                    : `${centToEuro(result.price)} €`}
+                </div>
+                <div>
+                  Link:{" "}
+                  <a
+                    href={result.url}
+                    className="text-blue-600 underline"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {result.url}
+                  </a>
+                </div>
+                {result.priceHistory &&
+                  Array.isArray(result.priceHistory) &&
+                  result.priceHistory.length > 0 && (
+                    <div className="mt-2">
+                      <div className="font-semibold mb-1">Price History:</div>
+                      <ul className="text-xs bg-gray-100 rounded p-2 max-h-32 overflow-auto">
+                        {result.priceHistory.map((entry, idx2) => (
+                          <li key={idx2} className="flex gap-2 justify-between">
+                            <span>
+                              {entry.price === null || entry.price === undefined
+                                ? "N/A"
+                                : `${centToEuro(entry.price)} €`}
+                            </span>
+                            <span className="text-gray-500">
+                              {formatGermanDate(entry.timestamp)}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+              </li>
+            ))
         ) : (
           <li>No results found.</li>
         )}

@@ -49,8 +49,31 @@ class DealzBot:
                     base_url=site.value, product_name=product_name
                 ),
                 "price": price,
+                "priceHistory": self._get_price_history(
+                    url=site.value, product_name=product_name
+                ),
             }
         return results
+
+    def _get_price_history(self, url: str, product_name: str):
+        query = (
+            self.db.query(PriceHistory)
+            .join(Dealz, PriceHistory.deal_id == Dealz.id)
+            .filter(
+                Dealz.product_name == product_name,
+                PriceHistory.url == url,
+            )
+            .order_by(PriceHistory.created_at.desc())
+        )
+        return [
+            {
+                "price": entry.price_in_cents,
+                "timestamp": entry.created_at.isoformat()
+                if hasattr(entry.created_at, "isoformat")
+                else entry.created_at,
+            }
+            for entry in query.all()
+        ]
 
     def is_robots_txt_valid(self, url: str) -> bool:
         robot = RobotFileParser(f"{url}/robots.txt")
