@@ -1,6 +1,8 @@
-from sqlmodel import Session, create_engine
+from sqlmodel import SQLModel, Session, create_engine
 import os
 from dotenv import load_dotenv
+from models.dealz import PriceHistory
+from models.dealz import Dealz
 
 load_dotenv()
 
@@ -18,6 +20,8 @@ assert all([DB_DRIVER, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME]), (
 
 connection_url = f"{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 db_engine = create_engine(connection_url)
+
+SQLModel.metadata.create_all(db_engine)
 
 
 def get_db():

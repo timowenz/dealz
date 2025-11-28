@@ -8,7 +8,8 @@ from alembic import context
 
 import os
 from sqlmodel import SQLModel
-from models import Dealz
+from models.dealz import PriceHistory
+from models.dealz import Dealz
 from dotenv import load_dotenv
 
 try:
