@@ -72,7 +72,7 @@ export default function App() {
           <LoaderCircleIcon className="animate-spin" />
         </div>
       )}
-      {error && <div className="text-red-500">An error occured: {error}</div>}
+      {error && <div className="text-red-500">An error occurred: {error}</div>}
 
       {data && <MerchantResult {...data} />}
     </div>
