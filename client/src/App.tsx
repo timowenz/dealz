@@ -33,8 +33,10 @@ export default function App() {
     setIsLoading(true);
 
     try {
+      const VITE_API_URL = import.meta.env.VITE_API_URL;
+
       const response = await axios.get(
-        `http://localhost:8000/api/v1/browser/${input}`
+        `${VITE_API_URL}/api/v1/browser/${input}`
       );
 
       const data: ProductNameSearch = response.data;
