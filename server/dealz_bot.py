@@ -119,13 +119,12 @@ class DealzBot:
                 headless=self.headless,
                 args=[
                     "--no-sandbox",
-                    "--disable-setuid-sandbox",
-                    "--disable-dev-shm-usage",
+                    "--disable-setuid-sandbox", "--disable-dev-shm-usage",
                     "--disable-gpu",
                     "--disable-software-rasterizer",
                     "--disable-extensions",
                     "--single-process",
-                    "--no-zygote",
+                    "--no-zygote",  # Important for Lambda
                     "--disable-background-networking",
                     "--disable-default-apps",
                     "--disable-sync",

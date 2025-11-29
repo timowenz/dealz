@@ -102,7 +102,7 @@ function MerchantResult(data: ProductNameSearch) {
       </div>
 
       <br />
-      <ul className="flex flex-col gap-2.5">
+      <ul className="flex flex-col gap-2.5 justify-center items-center">
         {data.results &&
         typeof data.results === "object" &&
         Object.keys(data.results).length > 0 ? (
