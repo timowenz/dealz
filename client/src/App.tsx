@@ -53,12 +53,16 @@ export default function App() {
     }
   }
 
+  // Use the same width for both form and results
+  // Responsive: full width on mobile, md:max-w-xl for both input/results
+  const panelWidthClass = "w-full max-w-xl";
+
   return (
-    <div className="w-screen h-screen flex flex-col justify-center items-center gap-5">
+    <div className="w-screen h-screen flex flex-col justify-center items-center gap-5 px-2">
       <h1 className="text-4xl font-bold">Dealz</h1>
       <form
         onSubmit={submitProductNameSearch}
-        className="w-[90%] sm:w-[50%] rounded-md"
+        className={panelWidthClass + " rounded-md"}
       >
         <Input
           placeholder="Enter product name"
@@ -66,6 +70,7 @@ export default function App() {
             setError(null);
             setInput(e.target.value);
           }}
+          className="w-full"
         ></Input>
       </form>
 
@@ -77,12 +82,14 @@ export default function App() {
       )}
       {error && <div className="text-red-500">An error occurred: {error}</div>}
 
-      {data && <MerchantResult {...data} />}
+      {data && <MerchantResult {...data} widthClass={panelWidthClass} />}
     </div>
   );
 }
 
-function MerchantResult(data: ProductNameSearch) {
+function MerchantResult(props: ProductNameSearch & { widthClass?: string }) {
+  const { widthClass = "w-full max-w-xl", ...data } = props;
+
   function centToEuro(cents: number): string {
     return (cents / 100).toFixed(2);
   }
@@ -93,7 +100,7 @@ function MerchantResult(data: ProductNameSearch) {
   }
 
   return (
-    <div className="w-[90%] lg:w-full">
+    <div className={widthClass + " mx-auto"}>
       <div className="text-center">
         <p>Product: {data.productName}</p>
         <p>
@@ -119,7 +126,7 @@ function MerchantResult(data: ProductNameSearch) {
             .map(([key, result]) => (
               <li
                 key={key}
-                className="flex flex-col gap-2.5 border rounded-md p-4"
+                className="flex flex-col gap-2.5 border rounded-md p-4 w-full"
               >
                 <div>
                   <span className="font-semibold">{key}</span>
@@ -134,7 +141,7 @@ function MerchantResult(data: ProductNameSearch) {
                   Link:{" "}
                   <a
                     href={result.url}
-                    className="text-blue-600 underline"
+                    className="text-blue-600 underline break-all"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
