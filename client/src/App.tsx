@@ -56,7 +56,10 @@ export default function App() {
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center gap-5">
       <h1 className="text-4xl font-bold">Dealz</h1>
-      <form onSubmit={submitProductNameSearch} className="w-[30%] rounded-md">
+      <form
+        onSubmit={submitProductNameSearch}
+        className="w-[90%] sm:w-[50%] rounded-md"
+      >
         <Input
           placeholder="Enter product name"
           onChange={(e) => {
@@ -90,7 +93,7 @@ function MerchantResult(data: ProductNameSearch) {
   }
 
   return (
-    <div className="w-[60%]">
+    <div className="w-[90%] lg:w-full">
       <div className="text-center">
         <p>Product: {data.productName}</p>
         <p>
