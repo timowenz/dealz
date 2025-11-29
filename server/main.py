@@ -6,12 +6,13 @@ from routers.v1 import dealz_router
 from database import get_db
 from services.dealz_bot import DealzBot
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 load_dotenv()
 
-origins = [
-    "http://localhost:5173",
-]
+ORIGIN = os.getenv("ORIGIN")
+
+origins = [ORIGIN]
 
 
 @asynccontextmanager
